@@ -1,13 +1,4 @@
-# gulag - a dev-oriented, production-geared osu! server
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/cmyui/gulag/master.svg)](https://results.pre-commit.ci/latest/github/cmyui/gulag/master)
-[![Discord](https://discordapp.com/api/guilds/748687781605408908/widget.png?style=shield)](https://discord.gg/ShEQgUx)
-
-gulag is an in-progress osu! server implementation geared towards running production
-servers - it is developed primarily by [Akatsuki](https://akatsuki.pw/) with our
-long-term goal being to replace our current [Ripple](https://github.com/osuripple)
-stack with something more easily maintainable, reliable, scalable, and feature-rich.
+tsuki!'s own fork of gulag, with changes from a lot of different other instances.
 
 # Setup
 ```sh
@@ -37,13 +28,25 @@ python3.9 -m pip install -U pip setuptools \
 # https://pre-commit.com/
 pre-commit install
 
-######################################
-# NOTE: before continuing, create an #
-# empty database in mysql for gulag  #
-######################################
+# if root, ignore this command
+sudo su -
+
+# create a new user (must be root)
+mysql
+create user 'username'@'localhost' identified by 'password';
+grant all privileges on * . * to 'username'@'localhost';
+flush privileges;
+exit;
+
+# create the database
+mysql -u username -p
+create database your_db_name;
+
+# verify the database exists
+show databases;
 
 # import gulag's mysql structure
-mysql -u your_sql_username -p your_db_name < migrations/base.sql
+mysql -u username -p your_db_name < migrations/base.sql
 
 # generate an ssl certificate for your domain (change email & domain)
 sudo certbot certonly \
@@ -52,28 +55,17 @@ sudo certbot certonly \
     --email your@email.com \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --agree-tos \
-    -d *.your.domain
+    -d *.your.domain -d your.domain
 
 # copy our nginx config to `sites-enabled` & open for editing
-sudo cp ext/nginx.conf /etc/nginx/sites-enabled/gulag.conf
-sudo nano /etc/nginx/sites-enabled/gulag.conf
-
-##########################################
-# NOTE: before continuing, make sure you #
-# have completely configured the file.   #
-##########################################
+sudo ln -r -s ext/nginx.conf /etc/nginx/sites-enabled/gulag.conf
+sudo nano ext/gulag.conf
 
 # reload the reverse proxy's config
 sudo nginx -s reload
 
 # create a config file from the sample & open it for editing
-cp .env.example .env
-nano .env
-
-##########################################
-# NOTE: before continuing, make sure you #
-# have completely configured the file.   #
-##########################################
+cp .env.example .env && nano .env
 
 # start the server
 ./main.py
