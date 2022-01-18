@@ -26,6 +26,7 @@ python3.9 -m pip install -U pip setuptools \
 
 # setup pre-commit's git hooks
 # https://pre-commit.com/
+apt install pre-commit
 pre-commit install
 
 # if root, ignore this command
