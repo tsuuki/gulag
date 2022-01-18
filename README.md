@@ -76,7 +76,7 @@ cp .env.example .env && nano .env
 ./main.py
 ```
 
-# Directory Structure
+# directory structure
     .
     ├── app                   # the server - logic, classes and objects
     |   ├── api                 # code related to handling external requests
