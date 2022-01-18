@@ -86,9 +86,10 @@ async def bancho_http_handler():
         b"<!DOCTYPE html>"
         + "<br>".join(
             (
-                f"Running gulag v{settings.VERSION}",
-                f"Players online: {len(app.state.sessions.players) - 1}",
-                '<a href="https://github.com/cmyui/gulag">Source code</a>',
+                f"running modified gulag v{settings.VERSION}",
+                f"players cheating currently: {len(app.state.sessions.players) - 1}",
+                '<a href="https://github.com/cmyui/gulag">original source code</a>',
+                '<a href="https://github.com/tsuuki/gulag">our modified source code</a>',
                 "",
                 f"<b>packets handled ({len(packets)})</b>",
                 "<br>".join([f"{p.name} ({p.value})" for p in packets]),
@@ -156,7 +157,7 @@ async def bancho_handler(
         # the server - tell their client to reconnect immediately.
         # (send 0ms restart packet since the server is already up)
         return Response(
-            content=app.packets.notification("Server has restarted.")
+            content=app.packets.notification("server has restarted.")
             + app.packets.restart_server(0),
         )
 
@@ -392,25 +393,25 @@ class StatsUpdateRequest(BasePacket):
 # TODO: these should probably be moved to the config.
 WELCOME_MSG = "\n".join(
     (
-        f"Welcome to {BASE_DOMAIN}.",
-        "To see a list of commands, use !help.",
-        "We have a public (Discord)[https://discord.gg/ShEQgUx]!",
-        "Enjoy the server!",
+        f"welcome to tsuki!.",
+        "to see a list of commands you can use, try sending !help",
+        "We have a public (discord)[https://discord.gg/7Fk7Dvhf]! come chat.",
+        "enjoy.",
     ),
 )
 
 RESTRICTED_MSG = (
-    "Your account is currently in restricted mode. "
-    "If you believe this is a mistake, or have waited a period "
-    "greater than 3 months, you may appeal via the form on the site."
+    "your account is currently in restricted mode. "
+    "if you believe this is a mistake, or have waited a period "
+    "greater than 2 weeks, you may appeal via the (discord)[https://discord.gg/7Fk7Dvhf]."
 )
 
 WELCOME_NOTIFICATION = app.packets.notification(
-    f"Welcome back to {BASE_DOMAIN}!\nRunning gulag v{settings.VERSION}.",
+    f"welcome back to tsuki!\nrunning gulag v{settings.VERSION}.",
 )
 
 OFFLINE_NOTIFICATION = app.packets.notification(
-    "The server is currently running in offline mode; "
+    "the server is currently running in offline mode; "
     "some features will be unavailble.",
 )
 
@@ -1013,7 +1014,7 @@ class SendPrivateMessage(BasePacket):
             msg = f"{msg[:2000]}... (truncated)"
             p.enqueue(
                 app.packets.notification(
-                    "Your message was truncated\n(exceeded 2000 characters).",
+                    "your message was truncated\n(exceeded 2000 characters).",
                 ),
             )
 
@@ -1086,7 +1087,7 @@ class SendPrivateMessage(BasePacket):
                             bmap.md5,
                         ):
                             resp_msg = (
-                                "Mapfile could not be found; "
+                                "mapfile could not be found; "
                                 "this incident has been reported."
                             )
                         else:
@@ -1166,9 +1167,9 @@ class SendPrivateMessage(BasePacket):
                                 )
 
                             elapsed = time.time_ns() - pp_calc_st
-                            resp_msg += f" | Elapsed: {magnitude_fmt_time(elapsed)}"
+                            resp_msg += f" | time elapsed: {magnitude_fmt_time(elapsed)}"
                     else:
-                        resp_msg = "Could not find map."
+                        resp_msg = "could not find map. check the beatmap link to see if the map is still submitted on bancho."
 
                         # time out their previous /np
                         p.last_np["timeout"] = 0.0

@@ -77,7 +77,6 @@ router = APIRouter(
     default_response_class=Response,
 )
 
-
 @cache
 def authenticate_player_session(
     param_function: Callable[..., Any],
@@ -313,7 +312,7 @@ async def osuAddFavourite(
         "SELECT 1 FROM favourites WHERE userid = :user_id AND setid = :set_id",
         {"user_id": player.id, "set_id": map_set_id},
     ):
-        return b"You've already favourited this beatmap!"
+        return b"you've already favourited this beatmap!"
 
     # add favourite
     await app.state.services.database.execute(
@@ -695,7 +694,7 @@ async def osuSubmitModularSelector(
 
             score.player.enqueue(
                 app.packets.notification(
-                    f"You achieved #{score.rank}! ({performance})",
+                    f"you achieved #{score.rank} on this map!\nworth {performance}",
                 ),
             )
 
@@ -1525,6 +1524,34 @@ if settings.REDIRECT_OSU_URLS:
         "/community/forums/topics/{_}",
     ):
         router.get(pattern)(osu_redirect)
+
+if settings.REDIRECT_OSU_URLS:
+    # NOTE: this will likely be removed with the addition of a frontend.
+    async def osu_redirect(request: Request, _: int = Path(...)):
+        return RedirectResponse(
+            url=f"https://tski.moe{request['path']}",
+            status_code=status.HTTP_301_MOVED_PERMANENTLY,
+        )
+
+    for pattern in (
+        "/u/{_}",
+    ):
+        router.get(pattern)(osu_redirect)
+
+if settings.REDIRECT_OSU_URLS:
+    # NOTE: this will likely be removed with the addition of a frontend.
+    async def osu_redirect(request: Request, _: int = Path(...)):
+        return RedirectResponse(
+            url=f"https://tski.moe/settings/avatar",
+            status_code=status.HTTP_301_MOVED_PERMANENTLY,
+        )
+
+    for pattern in (
+	"/home/account/edit#avatar",
+    ):
+        router.get(pattern)(osu_redirect)
+
+
 
 
 @router.get("/ss/{screenshot_id}.{extension}")

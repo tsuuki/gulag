@@ -9,6 +9,7 @@ from cmyui.logging import log
 from fastapi import FastAPI
 from fastapi import status
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import Response
 from starlette.middleware.base import RequestResponseEndpoint
@@ -59,6 +60,15 @@ def init_middlewares(asgi_app: FastAPI) -> None:
 
             # unrelated issue, raise normally
             raise exc
+
+    # cors middleware
+    asgi_app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     asgi_app.add_middleware(middlewares.MetricsMiddleware)
 
