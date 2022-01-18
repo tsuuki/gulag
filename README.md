@@ -45,6 +45,10 @@ create database your_db_name;
 # verify the database exists
 show databases;
 
+# exit root
+exit;
+exit
+
 # import gulag's mysql structure
 mysql -u username -p your_db_name < migrations/base.sql
 
