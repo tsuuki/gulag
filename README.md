@@ -1,6 +1,6 @@
 tsuki!'s own fork of gulag, with changes from a lot of different other instances.
 
-# Setup
+# setup
 ```sh
 # clone the repository & init the submodules
 git clone https://github.com/cmyui/gulag.git && cd gulag
@@ -62,7 +62,7 @@ sudo certbot certonly \
     --agree-tos \
     -d *.your.domain -d your.domain
 
-# copy our nginx config to `sites-enabled` & open for editing
+# symlink the nginx config to `sites-enabled` & open for editing
 sudo ln -r -s ext/nginx.conf /etc/nginx/sites-enabled/gulag.conf
 sudo nano ext/gulag.conf
 
