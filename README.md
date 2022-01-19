@@ -1,6 +1,7 @@
 tsuki!'s own fork of gulag, with changes from a lot of different other instances.
 
 # setup
+do NOT run this as root. create a new user `adduser [username]` and give it sudo `adduser [username] sudo`
 ```sh
 # clone the repository & init the submodules
 git clone https://github.com/cmyui/gulag.git && cd gulag
