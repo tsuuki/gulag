@@ -12,7 +12,6 @@ from typing import Any
 from typing import Callable
 from typing import Optional
 from typing import Sequence
-from typing import Type
 from typing import TypeVar
 from typing import Union
 
@@ -268,7 +267,7 @@ def _install_synchronous_excepthook() -> None:
     real_excepthook = sys.excepthook  # backup
 
     def _excepthook(
-        type_: Type[BaseException],
+        type_: type[BaseException],
         value: BaseException,
         traceback: types.TracebackType,
     ):
@@ -492,6 +491,8 @@ def display_startup_dialog() -> None:
     """Print any general information or warnings to the console."""
     if settings.DEVELOPER_MODE:
         log("running in advanced mode", Ansi.LRED)
+    if settings.DEBUG:
+        log("running in debug mode", Ansi.LMAGENTA)
 
     # running on root grants the software potentally dangerous and
     # unnecessary power over the operating system and is not advised.
